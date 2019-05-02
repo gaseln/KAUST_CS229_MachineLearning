@@ -1,0 +1,126 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amssymb, amsmath, amsthm}
+
+\author{Elnur Gasanov : 163411}
+\title{HW 7 : Support Vector Machine}
+
+\parindent=0mm
+
+\begin{document}
+\maketitle
+
+\section{Analysis of Lagrangian}
+
+\subsection{Relation between terms in $\widetilde{L}(\hat{\alpha})$}
+
+Let 
+
+\begin{align*}
+\hat{\alpha} & \overset{\text{def}}{=} \arg\max \widetilde{L}(\alpha)\\ 
+& = \arg\max \sum\limits_{i=1}^N \alpha_i - \frac12 \sum\limits_{i=1}^N \sum\limits_{j=1}^N \alpha_i \alpha_j y_i y_j \phi^\intercal(x_i) \phi(x_j), \\
+& s.t. \ \alpha_i \geq 0, \sum \alpha_i y_i~=~0
+\end{align*}
+
+Let us Lagrange multipliers again to solve the problem.
+
+\begin{align*}
+\widetilde{\widetilde{L}} (\alpha, \lambda, \nu) = -\sum\limits_{i=1}^N \alpha_i + \frac12 \sum\limits_{i=1}^N \sum\limits_{j=1}^N \alpha_i \alpha_j y_i y_j \phi^\intercal(x_i) \phi(x_j) - \langle \alpha, \lambda \rangle + \nu \left(\sum \alpha_i y_i\right)
+\end{align*}
+
+\begin{align*}
+\nabla_{\alpha_i} \widetilde{\widetilde{L}}  (\hat{\alpha}, \lambda, \nu)= 0 = y_i \sum\limits_{j=1}^N \hat{\alpha}_j y_j k(x_j, x_i) - 1 - \lambda_i + \nu y_i, \ \forall i \in {1, \dots, n}
+\end{align*}
+
+Having multiplied each equation by $\hat{\alpha}_i$ and summing them up, we get
+
+\begin{align*}
+\sum\limits_{i=1}^N \sum\limits_{j=1}^N \hat{\alpha}_i \hat{\alpha}_j y_i y_j k(x_j, x_i) - \sum\limits_{i=1}^N \hat{\alpha}_i - \langle \hat{\alpha}, \lambda \rangle + \nu \left(\sum \hat{\alpha}_i y_i\right) = 0
+\end{align*}
+
+Since $\sum \hat{\alpha}_i y_i = 0$ and KKT gives $\langle \hat{\alpha}, \lambda \rangle = 0$, we get  
+
+\begin{align}
+\boxed{\sum\limits_{i=1}^N \sum\limits_{j=1}^N \hat{\alpha}_i \hat{\alpha}_j y_i y_j k(x_j, x_i) = \sum\limits_{i=1}^N \hat{\alpha}_i}
+\end{align}
+
+\subsection{Relation between maximum margin and Lagrange multipliers}
+
+As can be seen from the lecture, $h = \frac{1}{||w||}$. Subsequently
+
+\begin{align*}
+\frac1{h^2} = ||w||^2 = ||\sum\limits_{i=1}^N \alpha_i y_i \phi(x_i) ||^2 = \sum\limits_{i=1}^N  \sum\limits_{j=1}^N \alpha_i \alpha_j y_i y_j k(x_i, x_j) =  \sum\limits_{i=1}^N \hat{\alpha}_i = 2 \widetilde{L}(\hat{\alpha}).
+\end{align*}
+
+\section{Computational experiments}
+
+\subsection{Default models}
+
+Having followed the task, we have obtained the following results:
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+ & linear & polynomial & rbf \\
+\hline
+\# of support vector & 598 & 598 & 598 \\
+\hline
+AUC-ROC & 0.823 & 0.821 & 0.666 \\
+\hline	
+\end{tabular}
+\caption{Comparison table for default choice of parameters}
+\end{table}
+
+\begin{figure*}[h!]
+\includegraphics[width=\linewidth]{ROC}
+\caption{ROC curves for default values of models with different kernels (linear, polynomial, radial basis functions)}
+\end{figure*}
+
+\subsection{5-fold cross validation}
+
+Again having followed the task, the following results were obtained:
+\newpage 
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+ & linear & polynomial & rbf \\
+\hline
+optimal parameters & {C:0.05} & {C:0.05, $\gamma$:'scale', coef0:0, degree:3} & {C:0.05, $\gamma$:'scale'}\\
+\hline
+\# of support vector & 604 & 808 & 808 \\
+\hline
+AUC-ROC & 0.8219 & 0.6159 & 0.6001\\
+\hline	
+\end{tabular}
+\caption{Comparison table for optimal choice of parameters}
+\end{table}
+
+\begin{figure*}[h!]
+\includegraphics[width=\linewidth]{ROC_kfold}
+\caption{ROC curves for optimal according to cross-validation values of models with different kernels (linear, polynomial, radial basis functions) }
+\end{figure*}
+
+\subsection{Comparison table}
+
+Let us look at the comparison table
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+ & linear & polynomial & rbf \\
+\hline
+default & $\mathbf{0.823}$ & $\mathbf{0.821}$ & 0.666 \\
+\hline
+k-fold & $\mathbf{0.8219}$ & 0.6159 & 0.6001\\
+\hline	
+\end{tabular}
+\caption{Comparison table of AUC-ROC values in different settings}
+\end{table}
+
+In this particular example, default values of models without cross-validation worked well (3 best models: models with linear kernel in both setting and model with polynomial kernel with default values of parameters).
+
+\end{document}
