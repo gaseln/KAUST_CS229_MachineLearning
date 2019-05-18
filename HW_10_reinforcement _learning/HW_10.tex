@@ -1,0 +1,252 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amssymb, amsmath, amsthm}
+\author{Elnur Gasanov : 163411}
+\title{HW 10 Reinforcement Learning}
+
+\parindent=0.0mm
+
+\begin{document}
+\maketitle
+\section{Optimal values and policy}
+
+GridWorld has shape (4, 5). Initial state is (0, 0), the goal state is (3, 4). Discount factor is set to 0.9, $\eta = 0.05$. Choice of new action when observing state $s_t$ is random, probabilities are given by SoftMax function applied to  $\frac{Q(s_t, a')}{T_t} \ \forall a'$.  $T$ exponentially decreases: $T_t~=~T_0 \cdot 0.99^t$.
+
+\subsection{Q learning}
+
+Optimal Q values was obtained over $10^5$ episodes using Q learning algorithm.
+
+Optimal Q values are presented in the matrix below.
+
+\begin{table*}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+46.83	&52.14	&58.05	&64.61	&1.84 \\
+\hline
+47.83	&53.14	&59.05	&3.51	&1.15\\
+\hline
+53.14	&59.05	&65.61	&0.01	&0.21\\
+\hline
+59.05	&65.61	&0.81	&7.90	&0\\
+\hline
+\end{tabular}
+\caption{Optimal Q values for action "up", Q-learning}	
+\quad
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+53.14	& 59.05 & 	65.61 &	72.9	& 33.5 \\
+\hline
+59.05	& 65.61 & 72.9	& 81& 90 \\
+\hline
+65.61	&72.9	&81	&90	&100\\
+\hline
+64.61	&71.9	&80	&0.34	&0\\
+\hline
+\end{tabular}
+\caption{Optimal Q values for action "down", Q-learning}	
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+46.83	&47.83	&53.14	&59.05	&3.69\\
+\hline
+52.14	&53.14	&59.05	&3.47	&0.06\\
+\hline
+58.05	&59.05	&65.61	&13.58	&4.05\\
+\hline
+1.17	&65.61	&3.85	&7.9 	&0\\
+\hline
+\end{tabular}
+\caption{Optimal Q values for action "left", Q-learning}	
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+53.14	&59.05	&65.61	&7.27&	1.79\\
+\hline
+59.05	&65.61	&72.9	&81	&3.18\\
+\hline
+65.61	&72.9	&81	&90	&16.96\\
+\hline
+72.90&	81&	90&	100	&0\\
+\hline
+\end{tabular}
+\caption{Optimal Q values for action "right", Q-learning}	
+\end{table*}
+
+Optimal $V$ values are derived directly from Q values.
+\begin{table*}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+53.14&	59.05	&65.61	&72.9	&33.5\\
+\hline
+59.05	&65.61&	72.9&	81&	90\\
+\hline
+65.61	&72.9	&81	&90	&100\\
+\hline
+72.90	&81&	90	&100	&0\\
+\hline
+\end{tabular}
+\caption{Optimal V values, Q-learning}	
+\end{table*}
+
+As can be seen, this matrix is "symmetric". It makes sense since cost of the path till the goal state should be equal when observing states located equally far from the goal state.
+
+Optimal policy is the following (d - down, r - right):
+
+\begin{table*}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+d, r&	d, r	&d, r	&d	&d\\
+\hline
+d, r	&d, r&	d, r&	d, r&	d\\
+\hline
+d, r	&d, r	&d, r	&d, r	&d\\
+\hline
+r	&r&	r	&r	&Goal\\
+\hline
+\end{tabular}
+\caption{Optimal policy, Q-learning}	
+\end{table*}
+
+\section{Sarsa algorithm}
+
+The same experiment was done using Sarsa algorithm (number of episodes = $6 \cdot 10^5$). 
+
+Optimal Q values are in the matrices below.
+
+\begin{table*}
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+33.37	&40.13	&46.54	&54.10	&57.33\\
+\hline
+33.84	&41.11	&48.39	&55.02	&60.40\\
+\hline
+38.16	&47.69	&56.90	&66.02	&72.64\\
+\hline
+45.76	&54.98	&65.73	&75.00	&0.00\\
+\hline
+\end{tabular}
+\caption{Optimal Q values for action "up", Sarsa}	
+\quad
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+38.59	&47.24	&55.73	&65.66	&72.26\\
+\hline
+45.20	&54.62	&64.83	&75.27	&86.32\\
+\hline
+48.46	&60.57	&73.50	&86.96	&100.00\\
+\hline
+49.96	&59.79	&71.32	&85.34 & 0	\\
+\hline
+\end{tabular}
+\caption{Optimal Q values for action "down", Sarsa}	
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+33.46	&33.67&	41.21&	47.55	&54.69\\
+\hline
+38.66	&39.26&	46.54	&55.95	&62.82\\
+\hline
+43.41	&43.98	&54.35	&64.30	&75.48\\
+\hline
+47.75	&49.66	&59.60	&71.39	&0.00\\
+\hline
+\end{tabular}
+\caption{Optimal Q values for action "left", Sarsa}	
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+40.48	&48.81	&55.81	&62.30	&60.58\\
+\hline
+46.53	&55.98	&65.36	&74.13	&69.00\\
+\hline
+54.45	&64.65	&75.06	&84.21	&85.39\\
+\hline
+61.94	&73.38	&85.40	&100.00	&0.00\\
+\hline
+\end{tabular}
+\caption{Optimal Q values for action "right", Sarsa}	
+\end{table*}
+
+Again, optimal $V$ values are derived from Q values.
+
+\begin{table*}
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+40.48	&48.81	&55.81	&65.66	&72.26\\
+\hline
+46.53	&55.98	&65.36&	75.27	&86.32\\
+\hline
+54.45	&64.65	&75.06	&86.96	&100.00\\
+\hline
+61.94&	73.38	&85.40&	100.00	&0.00\\
+\hline
+\end{tabular}
+\caption{Optimal V values, Sarsa}	
+\end{table*}
+
+Optimal policy is the following (d - down, r - right):
+
+\begin{table*}
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+r & r & r & d & d \\
+\hline
+r & r & r & d & d \\
+\hline
+r & r & r & d & d \\
+\hline
+r & r & r & r & Goal \\
+\hline
+\end{tabular}
+\caption{Optimal policy, Sarsa}	
+\end{table*}
+
+\section{A change on the grid world}
+
+\subsection{Two goals}
+
+New goal state is now at the position (0, 4). Q learning was used to obtain Q values. New optimal policy is in the corresponding matrix below. As expected, the agent encourages movements to the new goal when being close to it. (u - up, d - down, r - right, l - left)
+
+\begin{table}
+\centering
+\label{mat:two_goals}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+r & r & r & r & Goal \\
+\hline
+u & u & u & r & u \\
+\hline
+u & u & u & d & d \\
+\hline
+u & r & r & r & Goal \\
+\hline
+\end{tabular}
+\caption{Optimal policy, two goals, Q learning}	
+\end{table}
+
+\subsection{Q learning with undesirable goal state}
+
+We added a goal state at the position (0, 3) with reward value -100. The optimal policy in this case is shown in the table below. Optimal policy avoids moving towards the negative rewarded state. (u - up, d - down, r - right, l - left)
+
+
+\begin{table}
+\centering
+\label{mat:two_goals}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+d & d & d & Goal & Goal \\
+\hline
+r & r & r & r & u \\
+\hline
+d & d & d & d & d \\
+\hline
+r & r & r & r & Goal \\
+\hline
+\end{tabular}
+\caption{Optimal policy, two goals with positive (100) and one with negative (-100) reward, Q learning}	
+\end{table}
+
+
+\end{document}
