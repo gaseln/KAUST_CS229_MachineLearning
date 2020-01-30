@@ -1,6 +1,6 @@
-# CS229 Assignment Solutions
+# CS 229 Assignment Solutions
 
-Completed Assignments for [CS229: Machine Learning](https://sites.google.com/site/kaust229machinelearning/) Spring 2019.
+Completed Assignments for CS 229: Machine Learning([website](https://sites.google.com/site/kaust229machinelearning/), [syllabus](https://academicaffairs.kaust.edu.sa/Courses/Pages/DownloadSyllabus.aspx?Year=2019&Semester=030&Course=00007197&V=I)) Spring 2019 course.
 
 This course is a nice theoretical and practical introduction to main machine learning algorithms. The course helps to understand what intuitive ideas lie behind many mainstream algorithms and to build a solid foundation in underlying mathematics.
 
